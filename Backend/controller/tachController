@@ -1,0 +1,58 @@
+const model = require("../models/model");
+
+const CreatTach = async (req, res) => {
+  await model.create(req.body, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      console.log(data);
+      res.json(data);
+    }
+  });
+};
+
+const GetTach = async (req, res) => {
+  await model.find((error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.json(data);
+    }
+  });
+};
+
+const GetATach = async (req, res) => {
+  await model.findById(req.params.id, req.body, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.json(data);
+    }
+  });
+};
+
+const updateTach = async (req, res) => {
+  try {
+    const updateId = req.params.id;
+    const tach = await model.findByIdAndUpdate(updateId, req.body);
+    console.log("taches",tach);
+    res.json("tache modifiée");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteTach = async (req, res) => {
+  try {
+    const deletId = req.params.id;
+    console.log(deletId);
+    const tach = await model.findByIdAndDelete(deletId);
+    res.json("tache supprimée");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { CreatTach, GetTach, GetATach, updateTach, deleteTach };
